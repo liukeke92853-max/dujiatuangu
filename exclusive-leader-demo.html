@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>团长侧独家关系展示 Demo</title>
+  <style>
+    :root {
+      --bg: #eef5ff;
+      --panel: #ffffff;
+      --soft: #f5f7fb;
+      --line: #e8edf5;
+      --text: #1f2937;
+      --muted: #7b8798;
+      --blue: #2f66ff;
+      --blue-soft: #e8f0ff;
+      --blue-band: #dbeafe;
+      --green: #17b26a;
+      --green-soft: #e9f8f1;
+      --orange: #f79009;
+      --orange-soft: #fff3df;
+      --red: #f04438;
+      --red-soft: #fff0ef;
+      --gray-tag: #eef1f6;
+      --shadow: 0 10px 30px rgba(31, 54, 88, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% -20%, rgba(88, 166, 255, .24), transparent 38%),
+        linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .page {
+      min-width: 1180px;
+      padding: 10px 10px 24px;
+    }
+
+    .toolbar,
+    .main-card {
+      background: var(--panel);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar {
+      min-height: 98px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+
+    .toolbar-head,
+    .card-head,
+    .card-actions,
+    .row,
+    .business {
+      display: flex;
+      align-items: center;
+    }
+
+    .toolbar-head {
+      justify-content: space-between;
+      margin-bottom: 18px;
+      font-size: 16px;
+      font-weight: 650;
+    }
+
+    .reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6b7890;
+      font-weight: 500;
+      cursor: default;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 14px;
+    }
+
+    .select,
+    .state-tabs button,
+    .ghost-button {
+      height: 40px;
+      border: 1px solid #d8e1ee;
+      background: #fff;
+      border-radius: 6px;
+      color: #738097;
+      font: inherit;
+    }
+
+    .select {
+      width: 342px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+    }
+
+    .main-card {
+      padding: 22px 20px 18px;
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .state-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .state-tabs button {
+      min-width: 112px;
+      padding: 0 14px;
+      color: #42526e;
+      cursor: pointer;
+    }
+
+    .state-tabs button.active {
+      color: var(--blue);
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      font-weight: 650;
+    }
+
+    .submit-card {
+      background: var(--soft);
+      border-radius: 8px;
+      padding: 16px 18px;
+      min-height: 430px;
+    }
+
+    .card-head {
+      justify-content: space-between;
+      min-height: 44px;
+      padding: 0 6px 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--blue);
+      background: #e8efff;
+      border: 1px solid #9cb9ff;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .card-actions {
+      gap: 28px;
+      color: #8792a6;
+    }
+
+    .link-action {
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    .info-dot {
+      display: inline-grid;
+      place-items: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      color: #fff;
+      background: #8a94a8;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    .notice {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      margin: 2px 0 12px;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+    }
+
+    .notice.show {
+      display: flex;
+    }
+
+    .notice-risk {
+      color: #9a5b00;
+      border-color: #ffd188;
+      background: var(--orange-soft);
+    }
+
+    .notice-normal {
+      color: #157148;
+      border-color: #a6e6c7;
+      background: var(--green-soft);
+    }
+
+    .notice-title {
+      font-weight: 700;
+      margin-right: 10px;
+    }
+
+    .notice-text {
+      color: inherit;
+    }
+
+    .ghost-button {
+      height: 32px;
+      padding: 0 12px;
+      color: #52637a;
+      background: rgba(255, 255, 255, .68);
+    }
+
+    .table {
+      overflow: hidden;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .table-head,
+    .row {
+      display: grid;
+      grid-template-columns: 1.3fr 2.1fr 1.4fr;
+      align-items: center;
+    }
+
+    .table-head {
+      min-height: 48px;
+      padding: 0 18px;
+      color: #1f2937;
+      background: var(--blue-band);
+      font-weight: 700;
+    }
+
+    .row {
+      min-height: 112px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .help {
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 6px;
+      border-radius: 50%;
+      color: #fff;
+      background: #b8c0ce;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .business {
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 34%, #ffe2d6 0 22%, transparent 23%),
+        radial-gradient(circle at 50% 98%, #5c6bc0 0 34%, transparent 35%),
+        linear-gradient(140deg, #ffb7a3 0%, #ffd7c5 44%, #6c7cff 45%, #4564e5 100%);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .business-name {
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .default-name {
+      font-weight: 650;
+    }
+
+    .setting-main {
+      color: #526174;
+      line-height: 1.9;
+    }
+
+    .setting-main strong {
+      color: #202a37;
+      margin-left: 18px;
+      font-weight: 700;
+    }
+
+    .edit {
+      color: var(--blue);
+      font-weight: 700;
+      margin-left: 8px;
+    }
+
+    .exclusive-line {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 24px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .tag-green {
+      color: #067647;
+      background: var(--green-soft);
+      border: 1px solid #abe7c6;
+    }
+
+    .tag-orange {
+      color: #b54708;
+      background: var(--orange-soft);
+      border: 1px solid #ffd18b;
+    }
+
+    .tag-gray {
+      color: #667085;
+      background: var(--gray-tag);
+      border: 1px solid #dfe4ec;
+    }
+
+    .tag-blue {
+      color: #2457e6;
+      background: var(--blue-soft);
+      border: 1px solid #adc3ff;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      color: #fff;
+      background: #9aa4b5;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tooltip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      width: 320px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: #fff;
+      background: rgba(17, 24, 39, .94);
+      line-height: 1.6;
+      font-weight: 500;
+      white-space: normal;
+      transform: translateX(-50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .16s ease;
+      z-index: 10;
+    }
+
+    .tooltip:hover::after {
+      opacity: 1;
+    }
+
+    .switch {
+      justify-self: end;
+      width: 46px;
+      height: 24px;
+      border-radius: 999px;
+      background: #c6ccd6;
+      padding: 3px;
+      transition: background .18s ease;
+    }
+
+    .switch::before {
+      content: "";
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, .25);
+      transition: transform .18s ease;
+    }
+
+    .switch.on {
+      background: var(--blue);
+    }
+
+    .switch.on::before {
+      transform: translateX(22px);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="toolbar">
+      <div class="toolbar-head">
+        <span>筛选</span>
+        <span class="reset">◇ 重置</span>
+      </div>
+      <div class="filter-row">
+        <div class="select">
+          <span>团长账号：请选择</span>
+          <span>⌄</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="main-card">
+      <h1 class="section-title">提报列表</h1>
+      <div class="state-tabs" aria-label="状态切换">
+        <button class="active" type="button" data-state="normal">独家生效中</button>
+        <button type="button" data-state="risk">解绑观察中</button>
+        <button type="button" data-state="none">非独家</button>
+      </div>
+
+      <article class="submit-card">
+        <div class="card-head">
+          <div class="brand">
+            <div class="brand-mark">多</div>
+            <span>多多好物</span>
+          </div>
+          <div class="card-actions">
+            <span class="link-action"><span class="info-dot">i</span>排除指定商品 ✎</span>
+            <span><span class="info-dot">i</span>当月提报设置信息修改次数&nbsp; 2/5</span>
+          </div>
+        </div>
+
+        <div class="notice notice-normal" id="normalNotice">
+          <div>
+            <span class="notice-title">当前独家关系生效中</span>
+            <span class="notice-text">自动提报数据归属独家团顾「软糖」。</span>
+          </div>
+          <button class="ghost-button" type="button">查看说明</button>
+        </div>
+
+        <div class="notice notice-risk" id="riskNotice">
+          <div>
+            <span class="notice-title">独家关系解绑观察中，剩余 5 天</span>
+            <span class="notice-text">恢复授权，并重新开启原独家团顾自动提报且机制 >= 2.8%，可取消解绑。</span>
+          </div>
+          <button class="ghost-button" type="button">查看原因</button>
+        </div>
+
+        <div class="table">
+          <div class="table-head">
+            <div>对接商务 <span class="help">?</span></div>
+            <div>提报设置</div>
+            <div style="text-align: right;">自动提报</div>
+          </div>
+
+          <div class="row">
+            <div class="business">
+              <div class="avatar" aria-hidden="true"></div>
+              <span class="business-name">软糖</span>
+            </div>
+            <div class="setting-main">
+              <div>参与自动提报商品类型：普通商品</div>
+              <div>合作费率分成 <strong id="rateText">15:85</strong><span class="edit">✎</span></div>
+              <div class="exclusive-line" id="exclusiveLine"></div>
+            </div>
+            <div class="switch on" id="businessSwitch" aria-label="自动提报已开启"></div>
+          </div>
+
+          <div class="row">
+            <div class="default-name">默认提报</div>
+            <div class="setting-main">
+              <div>参与自动提报商品类型：普通商品；托管商品</div>
+              <div>合作费率分成 <strong>19:81</strong><span class="edit">✎</span></div>
+              <div class="exclusive-line">
+                <span class="tag tag-gray">不参与独家关系</span>
+              </div>
+            </div>
+            <div class="switch" aria-label="自动提报未开启"></div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const stateData = {
+      normal: {
+        rate: "15:85",
+        switchOn: true,
+        normalNotice: true,
+        riskNotice: false,
+        html: `
+          <span class="tag tag-green">独家生效中</span>
+          <span class="tag tag-blue">绑定团顾：软糖</span>
+          <span class="tooltip" data-tip="当前自动提报数据全部归属该独家团顾。手动提报数据按活动所属团顾归属。">?</span>
+        `
+      },
+      risk: {
+        rate: "20:80",
+        switchOn: false,
+        normalNotice: false,
+        riskNotice: true,
+        html: `
+          <span class="tag tag-orange">解绑观察中｜剩余 5 天</span>
+          <span class="tag tag-gray">触发原因：自动提报关闭</span>
+          <span class="tooltip" data-tip="观察期内团长授权状态恢复正常，并重新开启原独家团顾自动提报且机制 >= 2.8%，则取消解绑。观察期内自动提报数据仍归属原独家团顾。">?</span>
+        `
+      },
+      none: {
+        rate: "19:81",
+        switchOn: false,
+        normalNotice: false,
+        riskNotice: false,
+        html: `
+          <span class="tag tag-gray">未绑定独家</span>
+          <span class="tooltip" data-tip="满足授权正常、开启当前团顾自动提报、机制 >= 2.8%、全量有效合作订单 >= X 单后，由定时任务自动绑定。">?</span>
+        `
+      }
+    };
+
+    const tabs = document.querySelectorAll(".state-tabs button");
+    const exclusiveLine = document.querySelector("#exclusiveLine");
+    const rateText = document.querySelector("#rateText");
+    const businessSwitch = document.querySelector("#businessSwitch");
+    const normalNotice = document.querySelector("#normalNotice");
+    const riskNotice = document.querySelector("#riskNotice");
+
+    function render(state) {
+      const data = stateData[state];
+      exclusiveLine.innerHTML = data.html;
+      rateText.textContent = data.rate;
+      businessSwitch.classList.toggle("on", data.switchOn);
+      normalNotice.classList.toggle("show", data.normalNotice);
+      riskNotice.classList.toggle("show", data.riskNotice);
+      tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.state === state));
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => render(tab.dataset.state));
+    });
+
+    render("normal");
+  </script>
+</body>
+</html>
