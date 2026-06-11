@@ -3,30 +3,405 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="refresh" content="0; url=leader-submit-settings-base-demo.html" />
-  <title>团长侧提报设置 Demo</title>
+  <title>团长侧提报设置基础 Demo</title>
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      color: #1f2937;
-      background: #edf5ff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    :root {
+      --page-bg: #edf5ff;
+      --panel: #ffffff;
+      --card-bg: #f5f7fb;
+      --header-bg: #dceafe;
+      --line: #e8edf5;
+      --text: #1f2937;
+      --muted: #7b8798;
+      --blue: #2f66ff;
+      --blue-soft: #e8f0ff;
+      --switch-off: #c7ccd5;
+      --shadow: 0 10px 30px rgba(31, 54, 88, .07);
     }
 
-    a {
-      color: #2f66ff;
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 80% -22%, rgba(83, 174, 255, .28), transparent 36%),
+        linear-gradient(180deg, #f7fbff 0%, var(--page-bg) 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .page {
+      min-width: 1180px;
+      padding: 10px 10px 24px;
+    }
+
+    .filter,
+    .content {
+      background: var(--panel);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .filter {
+      min-height: 98px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+
+    .filter-head,
+    .submit-head,
+    .actions,
+    .merchant {
+      display: flex;
+      align-items: center;
+    }
+
+    .filter-head {
+      justify-content: space-between;
+      margin-bottom: 18px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .reset {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #6b7890;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .select {
+      width: 342px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      border: 1px solid #d8e1ee;
+      border-radius: 6px;
+      color: #8792a6;
+      background: #fff;
+    }
+
+    .content {
+      padding: 22px 20px 18px;
+    }
+
+    .demo-state {
+      display: flex;
+      gap: 8px;
+      margin: -4px 0 14px;
+    }
+
+    .demo-state button {
+      height: 32px;
+      min-width: 96px;
+      padding: 0 12px;
+      border: 1px solid #d8e1ee;
+      border-radius: 6px;
+      color: #526174;
+      background: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .demo-state button.active {
+      color: var(--blue);
+      border-color: var(--blue);
+      background: var(--blue-soft);
       font-weight: 650;
-      text-decoration: none;
+    }
+
+    .title {
+      margin: 0 0 18px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .submit-card {
+      min-height: 430px;
+      padding: 16px 18px;
+      border-radius: 8px;
+      background: var(--card-bg);
+    }
+
+    .submit-head {
+      min-height: 44px;
+      justify-content: space-between;
+      padding: 0 6px 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #9cb9ff;
+      border-radius: 50%;
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .actions {
+      gap: 28px;
+      color: #8792a6;
+    }
+
+    .action-link {
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    .info-dot {
+      display: inline-grid;
+      place-items: center;
+      width: 17px;
+      height: 17px;
+      margin-right: 6px;
+      border-radius: 50%;
+      color: #fff;
+      background: #8a94a8;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .table {
+      overflow: hidden;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .table-head,
+    .row {
+      display: grid;
+      grid-template-columns: 1.3fr 2.1fr 1.4fr;
+      align-items: center;
+    }
+
+    .table-head {
+      min-height: 48px;
+      padding: 0 18px;
+      color: #1f2937;
+      background: var(--header-bg);
+      font-weight: 700;
+    }
+
+    .row {
+      min-height: 112px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .help {
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 6px;
+      border-radius: 50%;
+      color: #fff;
+      background: #b8c0ce;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .merchant {
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 34%, #ffe2d6 0 22%, transparent 23%),
+        radial-gradient(circle at 50% 98%, #5c6bc0 0 34%, transparent 35%),
+        linear-gradient(140deg, #ffb7a3 0%, #ffd7c5 44%, #6c7cff 45%, #4564e5 100%);
+    }
+
+    .merchant-name,
+    .default-name {
+      font-weight: 650;
+    }
+
+    .merchant-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .exclusive-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 22px;
+      padding: 0 7px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 20px;
+    }
+
+    .exclusive-tag.green {
+      color: #067647;
+      background: #e9f8f1;
+      border: 1px solid #abe7c6;
+    }
+
+    .exclusive-tag.orange {
+      color: #b54708;
+      background: #fff3df;
+      border: 1px solid #ffd18b;
+    }
+
+    .setting {
+      color: #526174;
+      line-height: 1.9;
+    }
+
+    .setting strong {
+      margin-left: 18px;
+      color: #202a37;
+      font-weight: 700;
+    }
+
+    .edit {
+      margin-left: 8px;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .switch {
+      justify-self: end;
+      width: 46px;
+      height: 24px;
+      padding: 3px;
+      border-radius: 999px;
+      background: var(--switch-off);
+      transition: background .18s ease;
+    }
+
+    .switch::before {
+      content: "";
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, .25);
+      transition: transform .18s ease;
+    }
+
+    .switch.on {
+      background: var(--blue);
+    }
+
+    .switch.on::before {
+      transform: translateX(22px);
     }
   </style>
 </head>
 <body>
-  <main>
-    正在打开 Demo，如未自动跳转，请点击
-    <a href="leader-submit-settings-base-demo.html">团长侧提报设置 Demo</a>
+  <main class="page">
+    <section class="filter">
+      <div class="filter-head">
+        <span>筛选</span>
+        <span class="reset">◇ 重置</span>
+      </div>
+      <div class="select">
+        <span>团长账号：　请选择</span>
+        <span>⌄</span>
+      </div>
+    </section>
+
+    <section class="content">
+      <h1 class="title">提报列表</h1>
+      <div class="demo-state" aria-label="独家状态演示切换">
+        <button class="active" type="button" data-exclusive="active" onclick="renderExclusiveState('active')">独家中</button>
+        <button type="button" data-exclusive="observing" onclick="renderExclusiveState('observing')">解绑观察中</button>
+      </div>
+
+      <article class="submit-card">
+        <div class="submit-head">
+          <div class="brand">
+            <div class="brand-logo">多</div>
+            <span>多多好物</span>
+          </div>
+          <div class="actions">
+            <span class="action-link"><span class="info-dot">i</span>排除指定商品 ✎</span>
+            <span><span class="info-dot">i</span>当月提报设置信息修改次数&nbsp; 2/5</span>
+          </div>
+        </div>
+
+        <div class="table">
+          <div class="table-head">
+            <div>对接商务 <span class="help">?</span></div>
+            <div>提报设置</div>
+            <div style="text-align: right;">自动提报</div>
+          </div>
+
+          <div class="row">
+            <div class="merchant">
+              <div class="avatar" aria-hidden="true"></div>
+              <span class="merchant-text">
+                <span class="merchant-name">软糖</span>
+                <span class="exclusive-tag green" id="exclusiveTag">独家中</span>
+              </span>
+            </div>
+            <div class="setting">
+              <div>参与自动提报商品类型：普通商品</div>
+              <div>合作费率分成 <strong>15:85</strong><span class="edit">✎</span></div>
+            </div>
+            <div class="switch on" aria-label="自动提报已开启"></div>
+          </div>
+
+          <div class="row">
+            <div class="default-name">默认提报</div>
+            <div class="setting">
+              <div>参与自动提报商品类型：普通商品；托管商品</div>
+              <div>合作费率分成 <strong>19:81</strong><span class="edit">✎</span></div>
+            </div>
+            <div class="switch" aria-label="自动提报未开启"></div>
+          </div>
+        </div>
+      </article>
+    </section>
   </main>
+  <script>
+    window.renderExclusiveState = function renderExclusiveState(state) {
+      const exclusiveTag = document.querySelector("#exclusiveTag");
+      const demoButtons = document.querySelectorAll(".demo-state button");
+      const observing = state === "observing";
+      exclusiveTag.textContent = observing ? "独家解绑观察中｜剩余 5 天" : "独家中";
+      exclusiveTag.className = observing ? "exclusive-tag orange" : "exclusive-tag green";
+      demoButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.exclusive === state);
+      });
+    };
+  </script>
 </body>
 </html>
