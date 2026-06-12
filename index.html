@@ -93,31 +93,6 @@
       padding: 22px 20px 18px;
     }
 
-    .demo-state {
-      display: flex;
-      gap: 8px;
-      margin: -4px 0 14px;
-    }
-
-    .demo-state button {
-      height: 32px;
-      min-width: 96px;
-      padding: 0 12px;
-      border: 1px solid #d8e1ee;
-      border-radius: 6px;
-      color: #526174;
-      background: #fff;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .demo-state button.active {
-      color: var(--blue);
-      border-color: var(--blue);
-      background: var(--blue-soft);
-      font-weight: 650;
-    }
-
     .title {
       margin: 0 0 18px;
       font-size: 16px;
@@ -272,12 +247,6 @@
       border: 1px solid #abe7c6;
     }
 
-    .exclusive-tag.orange {
-      color: #b54708;
-      background: #fff3df;
-      border: 1px solid #ffd18b;
-    }
-
     .setting {
       color: #526174;
       line-height: 1.9;
@@ -340,10 +309,6 @@
 
     <section class="content">
       <h1 class="title">提报列表</h1>
-      <div class="demo-state" aria-label="独家状态演示切换">
-        <button class="active" type="button" data-exclusive="active" onclick="renderExclusiveState('active')">独家中</button>
-        <button type="button" data-exclusive="observing" onclick="renderExclusiveState('observing')">解绑观察中</button>
-      </div>
 
       <article class="submit-card">
         <div class="submit-head">
@@ -391,17 +356,5 @@
       </article>
     </section>
   </main>
-  <script>
-    window.renderExclusiveState = function renderExclusiveState(state) {
-      const exclusiveTag = document.querySelector("#exclusiveTag");
-      const demoButtons = document.querySelectorAll(".demo-state button");
-      const observing = state === "observing";
-      exclusiveTag.textContent = observing ? "独家解绑观察中｜剩余 5 天" : "独家中";
-      exclusiveTag.className = observing ? "exclusive-tag orange" : "exclusive-tag green";
-      demoButtons.forEach((button) => {
-        button.classList.toggle("active", button.dataset.exclusive === state);
-      });
-    };
-  </script>
 </body>
 </html>
